@@ -1,7 +1,7 @@
 package com.example.ProjetoLeticia;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.sql.SQLOutput;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 @SpringBootApplication
@@ -41,70 +41,73 @@ public class ProjetoLeticiaApplication {
                 .chavepix("leticia.camargo@gmail.com.br")
                 .build();
 
-        do{
-            menu();
-            opcao = input.nextInt();
-            switch (opcao) {
+        try{
+            do{
+                menu();
+                opcao = input.nextInt();
+                switch (opcao) {
+                    case 0:
+                        System.out.println("Programa encerrado");
+                        break;
 
-                case 0:
-                    System.out.println("Programa encerrado");
-                    break;
+                    case 1:
+                        System.out.println("Dados da transação");
+                        System.out.println(cartao);
+                        System.out.println("Escreva o valor a ser transferido");
+                        valor = input.nextDouble();
+                        System.out.println("Escreva o juros ao mês");
+                        juros = input.nextDouble();
+                        System.out.printf("Valor da parcela R$%.2f\n",cartao.parcelarAnuidade(juros, valor));
+                        break;
 
-                case 1:
-                    System.out.println("Dados da transação");
-                    System.out.println(cartao);
-                    System.out.println("Escreva o valor a ser transferido");
-                    valor = input.nextDouble();
-                    System.out.println("Escreva o juros ao mês");
-                    juros = input.nextDouble();
-                    System.out.printf("Valor da parcela R$%.2f\n",cartao.parcelarAnuidade(juros, valor));
-                    break;
+                    case 2:
+                        System.out.println("Dados da transação");
+                        System.out.println(cartao);
+                        System.out.println("Escreva o valor a ser transferido");
+                        valor = input.nextDouble();
+                        System.out.println("Escreva o juros ao mês");
+                        juros = input.nextDouble();
+                        System.out.printf("Valor da parcela R$%.2f\n", cartao.parcelarMontante(juros, valor));
+                        break;
 
-                case 2:
-                    System.out.println("Dados da transação");
-                    System.out.println(cartao);
-                    System.out.println("Escreva o valor a ser transferido");
-                    valor = input.nextDouble();
-                    System.out.println("Escreva o juros ao mês");
-                    juros = input.nextDouble();
-                    System.out.printf("Valor da parcela R$%.2f\n", cartao.parcelarMontante(juros, valor));
-                    break;
+                    case 3:
+                        System.out.println("Dados da transação");
+                        System.out.println(cartao);
+                        System.out.println("Escreva o valor a ser transferido");
+                        valor = input.nextDouble();
+                        System.out.println(pagarCartao(cartao, valor));
+                        break;
 
-                case 3:
-                    System.out.println("Dados da transação");
-                    System.out.println(cartao);
-                    System.out.println("Escreva o valor a ser transferido");
-                    valor = input.nextDouble();
-                    System.out.println(pagarCartao(cartao, valor));
-                    break;
+                    case 4:
+                        System.out.println("Dados da transação");
+                        System.out.println(boleto);
+                        System.out.println(verificarBoleto(boleto, boleto.valorBoleto()));
+                        System.out.println("Limite do Remetente: " + boleto.getLimiteRemetente());
+                        System.out.println("Saldo Destinatário: " + boleto.getSaldoDestinatario());
+                        break;
 
-                case 4:
-                    System.out.println("Dados da transação");
-                    System.out.println(boleto);
-                    System.out.println(verificarBoleto(boleto, boleto.pagarBoleto()));
-                    break;
+                    case 5:
+                        System.out.println("Dados da transação");
+                        System.out.println(pix);
+                        System.out.println("Escreva o valor a ser transferido");
+                        valor = input.nextDouble();
+                        System.out.println(fazerPix(pix, valor));
+                        break;
 
-                case 5:
-                    System.out.println("Dados da transação");
-                    System.out.println(pix);
-                    System.out.println("Escreva o valor a ser transferido");
-                    valor = input.nextDouble();
-                    System.out.println(fazerPix(pix, valor));
-                    break;
+                    case 6:
+                        System.out.println("CHAVE PIX");
+                        System.out.println(pix.definirChavePix() + "\n\n\n\n\n");
+                        break;
 
-                case 6:
-                    System.out.println("pix");
-                    System.out.println(cartao);
-                    System.out.println(pix.definirChavePix());
-                    break;
+                    default:
+                        System.out.println("Valor errado! Digite um número de 0 a 6");
 
-                default:
-                    System.out.println("Valor errado! Digite um número de 0 a 6");
-
-            }
-        } while(opcao != 0);
-
-	}
+                }
+            } while (opcao != 0);
+        }catch (InputMismatchException ime) {
+            System.out.println("Somente números!");
+        }
+    }
 
     //MENU
     public static void menu(){
@@ -139,7 +142,7 @@ public class ProjetoLeticiaApplication {
     //Transferência com Boleto
     public static String verificarBoleto(TransacaoBoleto boleto, double valor) {
         if (boleto.realizarTransacao(valor)) {
-            return String.format("Pagamento realizado no valor de R$%.2f",boleto.pagarBoleto());
+            return String.format("Pagamento realizado no valor de R$%.2f",boleto.valorBoleto());
         }
         else if (!boleto.validarBoleto()) {
             return "Linha digitável inválida";

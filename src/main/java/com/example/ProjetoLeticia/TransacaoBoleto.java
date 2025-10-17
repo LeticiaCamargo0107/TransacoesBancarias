@@ -45,10 +45,11 @@ public class TransacaoBoleto extends Transacao implements Boleto {
         return matcher.find();
     }
 
-    public double pagarBoleto(){
-        double valorInteiro = Double.parseDouble(linhaDigitavel.substring(37, 45));
-        double valorDecimal = Double.parseDouble(linhaDigitavel.substring(45, 47));
-
-        return valorInteiro + 1;
+    public double valorBoleto(){
+        String valorInteiro = linhaDigitavel.substring(37, 45);
+        String valorDecimal = linhaDigitavel.substring(45, 47);
+        valorInteiro = valorInteiro.concat(".");
+        valorInteiro = valorInteiro.concat(valorDecimal);
+        return Double.parseDouble(valorInteiro);
     }
 }

@@ -2,6 +2,6 @@ package com.example.ProjetoLeticia;
 
 public interface Boleto {
 
-    double pagarBoleto();
+    double valorBoleto();
     boolean validarBoleto();
 }
